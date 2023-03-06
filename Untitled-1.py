@@ -1,27 +1,13 @@
 import socket
 
-HOST = '192.168.2.123'  # The IP address you want to listen on
-PORT = 10012  # The port you want to listen on
+HOST = '192.168.2.150'
+PORT = 10014
 
-# Create a socket object
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-# Bind the socket to a specific address and port
-s.bind((HOST, PORT))
-
-# Listen for incoming connections
-s.listen(1)
-
-# Accept incoming connections
-conn, addr = s.accept()
-print('Connected by', addr)
-
-# Continuously receive incoming data
-while True:
-    data = conn.recv(1024)  # Buffer size is 1024 bytes
-    if not data:
-        break
-    print('Received data:', data)
-
-# Close the connectionf44
-conn.close()
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    print("WAITING")
+    s.connect((HOST, PORT))
+    while True:
+        data = s.recv(1024)
+        if not data:
+            break
+        print(data.decode())
