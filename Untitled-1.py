@@ -23,5 +23,5 @@ while True:
         break
     print('Received data:', data)
 
-# Close the connection
+# Close the connectionf44
 conn.close()
