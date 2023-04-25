@@ -12,7 +12,6 @@ CSV_FILENAME = 'RemoteEventLog.csv'
 
 def get_message_from_code(code): #The first section of the recieved data is a code in hex which will be mapped to one of the below descriptions taken from vauban spreadsheet
     messages = {
-      
         0: "Unknown ID",
         1 : "ID suspended",
         2 : "Stolen ID",
@@ -99,6 +98,14 @@ def get_message_from_code(code): #The first section of the recieved data is a co
     }
     return messages.get(code, "Unknown code")
 
+def write_data_to_csv(data, raw_data_only):
+    if raw_data_only.get():
+        with open(CSV_FILENAME, 'a', newline='') as csvfile:
+            csv_writer = csv.writer(csvfile)
+            csv_writer.writerow([data])
+    else:
+        save_data_to_csv(data)
+
 def save_data_to_csv(data): #Function which takes the recieved data and then splits it up and puts into the CSV file
     stripped_data = data[:-1]  # Remove only the last character
     code = int(stripped_data[:2], 16)
@@ -135,24 +142,28 @@ def save_data_to_csv(data): #Function which takes the recieved data and then spl
 def quit_program():
     os._exit(0)
 
-def start_server(window, IP, PORT):
+def start_server(window, IP, PORT, raw_data_only):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
         server_socket.bind((IP, PORT))
         server_socket.listen(1)
         print(f'Listening on IP {IP} and port {PORT}')
 
         while True:
+
             window.update()  # Update the Tkinter window to keep it responsive
             conn, addr = server_socket.accept()
             with conn:
                 print(f'Client connected from {addr}')
                 while True:
+                    
                     data = conn.recv(BUFFER_SIZE)
                     if not data:
                         break
                     data_str = data[1:].decode('utf-8')  # Ignore the initial byte when decoding
                     print(f'Received data: {data_str}')
-                    save_data_to_csv(data_str)
+                    
+                    write_data_to_csv(data_str, raw_data_only)
+                    
                 print('Client disconnected')
 
 # Keep the imports and other functions the same
@@ -171,7 +182,7 @@ def main():
 
     # Create a new Tkinter window with progress bar, label, and quit button
     window = tk.Tk()
-    window.geometry("350x80")
+    window.geometry("350x100")
     window.title("GARDiS Remote Event Listener")
 
     # Add a progress bar
@@ -182,12 +193,18 @@ def main():
     # Add a label for IP address and port number
     ip_port_label = tk.Label(window, text=f"Listening on IP Address: {IP} Port number: {PORT}")
     ip_port_label.pack()
+        # Add a check button for raw data only
+    raw_data_only = tk.BooleanVar()
+    raw_data_only.set(False)
+    raw_data_checkbutton = tk.Checkbutton(window, text="Save raw data only", variable=raw_data_only)
+    raw_data_checkbutton.pack()
 
     quit_button = Button(window, text="Quit", command=quit_program)
     quit_button.pack()
 
     # Start the server in a separate thread
-    server_thread = threading.Thread(target=start_server, args=(window, IP, PORT)) # Pass the user-input IP and PORT
+    server_thread = threading.Thread(target=start_server, args=(window, IP, PORT, raw_data_only))
+    
     server_thread.daemon = True
     server_thread.start()
 
