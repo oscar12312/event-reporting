@@ -14,7 +14,7 @@ PORT = 10006
 BUFFER_SIZE = 1024
 CSV_FILENAME = 'RemoteEventLog.csv'
 
-def get_message_from_code(code): #The first section of the recieved data is a code in hex which will be mapped to one of the below descriptions
+def get_message_from_code(code): #The first section of the recieved data is a code in hex which will be mapped to one of the below descriptions taken from vauban spreadsheet
     messages = {
       
         0: "Unknown ID",
@@ -99,15 +99,17 @@ def get_message_from_code(code): #The first section of the recieved data is a co
         79 : "Access to menu",
         80 : "VEXTLCD button pressed",
         81 : "Code entered on VEXTLCD",
+        87 : "Controller Start Up"
     }
     return messages.get(code, "Unknown code")
 
-def save_data_to_csv(data):
+def save_data_to_csv(data): #Function which takes the recieved data and then splits it up and puts into the CSV file
     stripped_data = data[:-1]  # Remove only the last character
     code = int(stripped_data[:2], 16)
-    message = get_message_from_code(code)
+    message = get_message_from_code(code) #Function which decides which event descrpition will be printed to the CSV file
+   
     reader_number = int(stripped_data[17])    # Extract reader number
-    if reader_number == 0:
+    if reader_number == 0: #Check to see whether no reader number is present
         reader_str = "No reader"
     else:
         reader_str = f"Reader {reader_number}"
@@ -120,16 +122,14 @@ def save_data_to_csv(data):
     minute = int(stripped_data[12:14])
     second = int(stripped_data[14:16])
 
-
-    
     last_7_digits = stripped_data[-7:]  # Get the Card number
-
     if last_7_digits == "0000000":
         decimal_value = "No card number"
     else:
         decimal_value = int(last_7_digits, 16)  # Convert the last 7 digits from hexadecimal to decimal
     
-    datetime_str = f"{year}-{month:02d}-{day:02d} {hour:02d}:{minute:02d}:{second:02d}"
+    datetime_str = f"{year}-{month:02d}-{day:02d} {hour:02d}:{minute:02d}:{second:02d}" #Puts the data from the date and time into one string
+
 
     with open(CSV_FILENAME, 'a', newline='') as csvfile:
         csv_writer = csv.writer(csvfile)
