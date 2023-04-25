@@ -95,7 +95,7 @@ def get_message_from_code(code): #The first section of the recieved data is a co
         79 : "Access to menu",
         80 : "VEXTLCD button pressed",
         81 : "Code entered on VEXTLCD",
-        87 : "Controller Start Up"
+        87 : "Controller Start Up" #Added as this was the code found when powering up the controller when listening for events
     }
     return messages.get(code, "Unknown code")
 
