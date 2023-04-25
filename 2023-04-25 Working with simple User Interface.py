@@ -6,8 +6,6 @@ from tkinter import Button
 import os
 import threading
 from tkinter import ttk
-from tkinter import Listbox
-from tkinter import Scrollbar
 
 BUFFER_SIZE = 1024
 CSV_FILENAME = 'RemoteEventLog.csv'
@@ -100,36 +98,6 @@ def get_message_from_code(code): #The first section of the recieved data is a co
     }
     return messages.get(code, "Unknown code")
 
-def format_event_message(data):
-    stripped_data = data[:-1]
-    code = int(stripped_data[:2], 16)
-    message = get_message_from_code(code)
-
-    year = int(stripped_data[2:6])
-    month = int(stripped_data[6:8])
-    day = int(stripped_data[8:10])
-
-    hour = int(stripped_data[10:12])
-    minute = int(stripped_data[12:14])
-    second = int(stripped_data[14:16])
-
-    reader_number = int(stripped_data[17])
-
-    if reader_number == 0: #Check to see whether no reader number is present
-        reader_str = " "
-    else:
-        reader_str = f"Reader {reader_number}"
-
-    last_7_digits = stripped_data[-7:]
-    if last_7_digits == "0000000":
-        decimal_value = " "
-    else:
-        decimal_value = int(last_7_digits, 16)
-
-    datetime_str = f"{year}-{month:02d}-{day:02d} {hour:02d}:{minute:02d}:{second:02d}"
-    return f"{datetime_str} | {message} | Card: {decimal_value} | {reader_str}"
-
-
 def write_data_to_csv(data, raw_data_only):
     if raw_data_only.get():
         with open(CSV_FILENAME, 'a', newline='') as csvfile:
@@ -144,7 +112,7 @@ def save_data_to_csv(data): #Function which takes the recieved data and then spl
     message = get_message_from_code(code) #Function which decides which event descrpition will be printed to the CSV file
    
     reader_number = int(stripped_data[17])    # Extract reader number
-    if reader_number == 00: #Check to see whether no reader number is present
+    if reader_number == 0: #Check to see whether no reader number is present
         reader_str = " "
     else:
         reader_str = f"Reader {reader_number}"
@@ -174,13 +142,7 @@ def save_data_to_csv(data): #Function which takes the recieved data and then spl
 def quit_program():
     os._exit(0)
 
-def update_listbox(listbox, event_message):
-    listbox.insert(tk.END, event_message)
-    listbox.selection_clear(0, tk.END)
-    listbox.selection_set(tk.END)
-    listbox.see(tk.END)
-
-def start_server(window, IP, PORT, raw_data_only, event_listbox):
+def start_server(window, IP, PORT, raw_data_only):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
         server_socket.bind((IP, PORT))
         server_socket.listen(1)
@@ -202,11 +164,9 @@ def start_server(window, IP, PORT, raw_data_only, event_listbox):
                     
                     write_data_to_csv(data_str, raw_data_only)
                     
-                    # Format the event message and update the event_listbox
-                    event_message = format_event_message(data_str)
-                    update_listbox(event_listbox, event_message)
-
                 print('Client disconnected')
+
+# Keep the imports and other functions the same
 
 def main():
     # Create a simple Tkinter window
@@ -222,7 +182,7 @@ def main():
 
     # Create a new Tkinter window with progress bar, label, and quit button
     window = tk.Tk()
-    window.geometry("600x300")
+    window.geometry("350x100")
     window.title("GARDiS Remote Event Listener")
 
     # Add a progress bar
@@ -233,25 +193,18 @@ def main():
     # Add a label for IP address and port number
     ip_port_label = tk.Label(window, text=f"Listening on IP Address: {IP} Port number: {PORT}")
     ip_port_label.pack()
-
-    # Add a check button for raw data only
+        # Add a check button for raw data only
     raw_data_only = tk.BooleanVar()
     raw_data_only.set(False)
-    raw_data_checkbutton = tk.Checkbutton(window, text="Save only raw data to the CSV file", variable=raw_data_only)
+    raw_data_checkbutton = tk.Checkbutton(window, text="Save raw data only", variable=raw_data_only)
     raw_data_checkbutton.pack()
-
-    # Add a Listbox and Scrollbar for displaying events in real-time
-    event_listbox = Listbox(window, height=10, width=80)
-    scrollbar = Scrollbar(window, orient="vertical", command=event_listbox.yview)
-    scrollbar.pack(side="right", fill="y")  # Pack the scrollbar before the Listbox
-    event_listbox.pack()
-    event_listbox.config(yscrollcommand=scrollbar.set)
 
     quit_button = Button(window, text="Quit", command=quit_program)
     quit_button.pack()
 
     # Start the server in a separate thread
-    server_thread = threading.Thread(target=start_server, args=(window, IP, PORT, raw_data_only, event_listbox))
+    server_thread = threading.Thread(target=start_server, args=(window, IP, PORT, raw_data_only))
+    
     server_thread.daemon = True
     server_thread.start()
 
