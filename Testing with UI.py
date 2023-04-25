@@ -2,26 +2,10 @@ import socket
 import csv
 import tkinter as tk
 from tkinter import simpledialog
-from tkinter import Button, PhotoImage, Label
+from tkinter import Button, Label
 import os
-import socket
-import csv
-import tkinter as tk
-from tkinter import simpledialog
-from tkinter import Button, PhotoImage, Label
-import threading  # Add this import
-from itertools import cycle
 import time
 import threading
-from itertools import cycle
-import time
-from itertools import cycle
-import time
-from PIL import Image, ImageTk
-import threading
-from itertools import cycle
-import time
-from PIL import Image, ImageTk
 from tkinter import ttk
 
 
