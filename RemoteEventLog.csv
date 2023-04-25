@@ -25,3 +25,48 @@
 2023-04-25 09:20:15,End break-in,No card number,Reader 1
 2023-04-25 09:25:20,Access Granted,87654321,Reader 1
 2023-04-25 09:25:31,Unknown code,No card number,No reader
+2023-04-25 09:27:05,Access Granted,87654321,Reader 1
+2023-04-25 09:27:15,Controller Start Up,No card number,No reader
+2023-04-25 09:28:49,Opening on BP,No card number,Reader 1
+2023-04-25 09:28:50,Opening on BP,No card number,Reader 1
+2023-04-25 09:28:51,Opening on BP,No card number,Reader 1
+2023-04-25 09:29:24,Burglary,No card number,Reader 1
+2023-04-25 09:29:24,End break-in,No card number,Reader 1
+2023-04-25 09:29:24,Burglary,No card number,Reader 1
+2023-04-25 09:29:25,End break-in,No card number,Reader 1
+2023-04-25 09:29:26,Burglary,No card number,Reader 1
+2023-04-25 09:29:26,End break-in,No card number,Reader 1
+2023-04-25 09:29:28,Burglary,No card number,Reader 1
+2023-04-25 09:29:28,End break-in,No card number,Reader 1
+2023-04-25 09:29:29,Burglary,No card number,Reader 1
+2023-04-25 09:29:29,End break-in,No card number,Reader 1
+2023-04-25 09:32:24,Access Granted,87654321,Reader 1
+2023-04-25 09:32:30,Access Granted,87654321,Reader 1
+2023-04-25 09:40:21,Access Granted,87654321,Reader 1
+2023-04-25 09:42:25,Access Granted,87654321,Reader 1
+2023-04-25 09:42:39,Access Granted,60493568,Reader 1
+2023-04-25 09:42:45,Opening on BP,No card number,Reader 1
+2023-04-25 09:42:45,Opening on BP,No card number,Reader 1
+2023-04-25 09:42:46,Opening on BP,No card number,Reader 1
+2023-04-25 09:44:47,Enable green BG,No card number,Reader 1
+2023-04-25 09:44:47,End of green BG activation,No card number,Reader 1
+2023-04-25 09:44:47,Enable green BG,No card number,Reader 1
+2023-04-25 09:44:47,End of green BG activation,No card number,Reader 1
+2023-04-25 09:44:48,Enable green BG,No card number,Reader 1
+2023-04-25 09:44:48,End of green BG activation,No card number,Reader 1
+2023-04-25 09:44:48,Enable green BG,No card number,Reader 1
+2023-04-25 09:44:48,End of green BG activation,No card number,Reader 1
+2023-04-25 09:44:55,Enable green BG,No card number,Reader 1
+2023-04-25 09:44:55,End of green BG activation,No card number,Reader 1
+2023-04-25 09:44:55,Enable green BG,No card number,Reader 1
+2023-04-25 09:44:56,End of green BG activation,No card number,Reader 1
+2023-04-25 09:44:56,Enable green BG,No card number,Reader 1
+2023-04-25 09:44:57,End of green BG activation,No card number,Reader 1
+2023-04-25 09:44:58,Enable green BG,No card number,Reader 1
+2023-04-25 09:44:58,End of green BG activation,No card number,Reader 1
+2023-04-25 09:45:02,Burglary,No card number,Reader 1
+2023-04-25 09:45:02,End break-in,No card number,Reader 1
+2023-04-25 09:45:02,Burglary,No card number,Reader 1
+2023-04-25 09:45:03,End break-in,No card number,Reader 1
+2023-04-25 10:00:27,Access Granted,60493568,Reader 1
+2023-04-25 10:00:33,Access Granted,60493568,Reader 1

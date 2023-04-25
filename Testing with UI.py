@@ -2,15 +2,11 @@ import socket
 import csv
 import tkinter as tk
 from tkinter import simpledialog
-from tkinter import Button, Label
+from tkinter import Button
 import os
-import time
 import threading
 from tkinter import ttk
 
-
-IP = '192.168.2.100'
-PORT = 10006
 BUFFER_SIZE = 1024
 CSV_FILENAME = 'RemoteEventLog.csv'
 
@@ -57,9 +53,9 @@ def get_message_from_code(code): #The first section of the recieved data is a co
 	    37 : "Reserves",
 	    38 : "Reserves",
 	    39 : "Reserves",
-        40 : "Burglary",
+        40 : "Burglary", #Conditional input
         41 : "Door blocked",
-        42 : "End break-in",
+        42 : "End break-in", #Conditional input
         43 : "End door blocked",
         44 : "Door open at start of free access range",
         45 : "Door closed at end of free access range",
@@ -71,7 +67,7 @@ def get_message_from_code(code): #The first section of the recieved data is a co
         51 : "Alarm disablement (bistable mode)",
         52 : "Pulse on/off alarm",
         53 : "Wiegand format error",
-        54 : "Opening on BP",
+        54 : "Opening on BP", #Exit Button event
         55 : "Code entry timeout exceeded",
         56 : "End of keypad lock",
         57 : "Reader connection (VEXT232)",
@@ -110,7 +106,7 @@ def save_data_to_csv(data): #Function which takes the recieved data and then spl
    
     reader_number = int(stripped_data[17])    # Extract reader number
     if reader_number == 0: #Check to see whether no reader number is present
-        reader_str = "No reader"
+        reader_str = " "
     else:
         reader_str = f"Reader {reader_number}"
     
@@ -124,7 +120,7 @@ def save_data_to_csv(data): #Function which takes the recieved data and then spl
 
     last_7_digits = stripped_data[-7:]  # Get the Card number
     if last_7_digits == "0000000":
-        decimal_value = "No card number"
+        decimal_value = " "
     else:
         decimal_value = int(last_7_digits, 16)  # Convert the last 7 digits from hexadecimal to decimal
     
@@ -139,7 +135,7 @@ def save_data_to_csv(data): #Function which takes the recieved data and then spl
 def quit_program():
     os._exit(0)
 
-def start_server(window):
+def start_server(window, IP, PORT):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
         server_socket.bind((IP, PORT))
         server_socket.listen(1)
@@ -191,7 +187,7 @@ def main():
     quit_button.pack()
 
     # Start the server in a separate thread
-    server_thread = threading.Thread(target=start_server, args=(window,))
+    server_thread = threading.Thread(target=start_server, args=(window, IP, PORT)) # Pass the user-input IP and PORT
     server_thread.daemon = True
     server_thread.start()
 
